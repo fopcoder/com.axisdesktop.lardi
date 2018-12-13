@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -17,19 +17,15 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Size(min = 3, max = 50)
+  @NotNull
   private String login;
 
+  @NotNull
   private String password;
 
   @Transient
   private String repassword;
 
-  @Size(min = 5, max = 255)
+  @NotNull
   private String fio;
 }
-
-// Информация о пользователе в системе
-// Логин (только английские символы, не меньше 3х, без спецсимволов)
-// Пароль (минимум 5 символов)
-// ФИО (минимум 5 символов)

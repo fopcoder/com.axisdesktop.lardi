@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/base :: meta-head( 'Регистрация' ) "></head>
+<body>
+	<div class="container">
+		<form class="form" th:action="@{/registration}" method="POST" th:object="${user}">
+			<div class="form-group row">
+				<label for="login" class="control-label col-sm-2">Логин:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="username" id="username" th:field="*{login}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
+			<div class="form-group row">
+				<label for="password" class="control-label col-sm-2">Пароль:</label>
+				<div class="col-sm-3">
+					<input type="password" class="form-control" name="password" id="password" >
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+			<div class="form-group row">
+				<label for="repassword" class="control-label col-sm-2">Повторить пароль:</label>
+				<div class="col-sm-3">
+					<input type="password" class="form-control" name="repassword" id="repassword" >
+				</div>
+				
+			</div>
+			<div class="form-group row">
+				<label for="fio" class="control-label col-sm-2">ФИО:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="fio" id="fio" th:field="*{fio}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('fio')}" th:errors="*{fio}"></div>
+			<button id="call" type="submit" class="btn btn-success">Создать</button>
+		</form>
+	</div>
+</body>
+</html>
