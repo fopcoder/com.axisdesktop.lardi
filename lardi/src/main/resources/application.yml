@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:mysql://78.46.187.170:3306/lardi
+    username: lardi
+    password: lardi
+
+  devtools:
+    restart:
+      enabled: true
+      
+lardi:
+  contact:
+    per-page: 3

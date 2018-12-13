@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/base :: meta-head( 'Логин' ) "></head>
+<body>
+	<div class="container">
+		<div th:if="${param.error}" class="alert alert-danger row">  
+            Ошибка авторизации
+        </div>
+		<form class="form" th:action="@{/login}" method="POST">
+			<div class="form-group row">
+				<label for="login" class="control-label col-sm-1">Логин:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="username" id="username">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="password" class="control-label col-sm-1">Пароль:</label>
+				<div class="col-sm-3">
+					<input type="password" class="form-control" name="password" id="password">
+				</div>
+			</div>
+			<button id="call" type="submit" class="btn btn-success">Войти</button>
+		</form>
+		
+		<div class="row col-sm-5"><a th:href="@{/registration}">регистрация</div>
+		
+	</div>
+</body>
+</html>
