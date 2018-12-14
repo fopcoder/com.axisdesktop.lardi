@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/base :: meta-head( 'Добавить контакт' )"></head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/base :: navbar"></div>
+		<div class="page-header">
+			<h1>Добавить контакт</h1>
+		</div>
+		<div class="row col-sm alert alert-danger" th:if="${globalError != null}">Глобальная ошибка</div>
+		<form class="form" th:action="@{/contacts/add}" method="POST" th:object="${contact}">
+			<div class="form-group row">
+				<label for="surname" class="control-label col-sm-2">* Фамилия:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="surname" id="surname" th:field="*{surname}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+			<div class="form-group row">
+				<label for="name" class="control-label col-sm-2">* Имя:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="name" id="name" th:field="*{name}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+			<div class="form-group row">
+				<label for="patronymic" class="control-label col-sm-2">* Отчество:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="patronymic" id="patronymic" th:field="*{patronymic}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}"></div>
+			<div class="form-group row">
+				<label for="cellular" class="control-label col-sm-2">* Мобильный:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="cellular" id="cellular" th:field="*{cellular}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('cellular')}" th:errors="*{cellular}"></div>
+			<div class="form-group row">
+				<label for="phone" class="control-label col-sm-2">Телефон:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="phone" id="phone" th:field="*{phone}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+			<div class="form-group row">
+				<label for="email" class="control-label col-sm-2">Email:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="email" id="email" th:field="*{email}">
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+			<div class="form-group row">
+				<label for="address" class="control-label col-sm-2">Адрес:</label>
+				<div class="col-sm-3">
+					<textarea type="text" rows="5" class="form-control" name="address" id="address" th:field="*{address}"></textarea>
+				</div>
+			</div>
+			<div class="row col-sm alert alert-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+			<button id="call" type="submit" class="btn btn-success">Создать</button>
+		</form>
+	</div>
+</body>
+</html>
