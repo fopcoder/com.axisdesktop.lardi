@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -17,15 +17,15 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @NotNull
+  @NotBlank
   private String login;
 
-  @NotNull
+  @NotBlank
   private String password;
 
   @Transient
   private String repassword;
 
-  @NotNull
+  @NotBlank
   private String fio;
 }

@@ -7,4 +7,6 @@ import com.axisdesktop.lardi.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
   Integer countByLogin(String login);
+
+  User getByLogin(String login);
 }

@@ -1,38 +1,63 @@
 package com.axisdesktop.lardi.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.axisdesktop.lardi.entity.User;
+import com.axisdesktop.lardi.service.UserService;
 
-@RestController
-@RequestMapping("/user")
+@Controller
 public class UserController {
+  @Autowired
+  private PasswordEncoder passwordEnc;
+  @Autowired
+  private UserService userServ;
 
-  @GetMapping("/list")
-  public String list() {
+  @Autowired
+  @Qualifier("userValidator")
+  private Validator userValidator;
 
-    return null;
+  @InitBinder
+  private void initBinder(WebDataBinder binder) {
+    binder.setValidator(userValidator);
   }
 
-  @GetMapping("/{id}")
-  public String load(@PathVariable("id") String id) {
-    return id;
+  @ResponseBody
+  @RequestMapping("")
+  public String index() {
+    return "kjhkljhlkj";
   }
 
-  @PostMapping("/create")
-  public void create() {
-
+  @RequestMapping("/login")
+  public String login() {
+    return "login";
   }
 
-  @PostMapping("/update")
-  public void update() {
-
+  @GetMapping("/registration")
+  public String registration(User user) {
+    return "registration";
   }
 
-  @GetMapping("/delete/{id}")
-  public void delete() {
+  @PostMapping("/registration")
+  public String registration2(@ModelAttribute @Validated User user, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return "registration";
+    }
 
+    user.setPassword(passwordEnc.encode(user.getPassword()));
+    userServ.create(user);
+
+    return "contacts";
   }
 }
