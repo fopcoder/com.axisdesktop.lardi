@@ -1,6 +1,7 @@
 package com.axisdesktop.lardi.controller;
 
 import java.security.Principal;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,12 @@ public class ContactController {
   }
 
   @RequestMapping("")
-  public String contacts() {
+  public String contacts(@ModelAttribute Contact contact, Model model) {
+    List<Contact> contacts = contactServ.list(contact, 0, 10);
+    model.addAttribute("contacts", contacts);
+
+    System.err.println(contact);
+
     return "contacts";
   }
 

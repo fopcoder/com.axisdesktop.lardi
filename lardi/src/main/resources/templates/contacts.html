@@ -6,42 +6,31 @@
 		<div class="page-header">
 			<h1>Список контактов</h1>
 		</div>
-		<nav class="navbar navbar-light bg-light">nav</nav>
-		<div class="row">filter</div>
-
-
+		<div class="navbar navbar-light bg-light">
+			<span class="navbar-brand">Поиск</span>
+			<form th:action="@{/contacts}" th:object="${contact}" class="form-inline">
+				<div class="form-row">
+					<div class="col-auto">
+						<input type="text" class="form-control" name="name" id="name" th:field="*{name}" placeholder="Имя">
+					</div>
+					<div class="col-auto">
+						<input type="text" class="form-control" name="surname" id="surname" th:field="*{surname}" placeholder="Фамилия">
+					</div>
+					<div class="col-auto">
+						<input type="text" class="form-control" name="phone" id="phone" th:field="*{phone}" placeholder="Телефон">
+					</div>
+					<div class="col-auto">
+		     				<button type="submit" class="btn btn-primary">Искать</button>
+		   			</div>
+				</div>
+			</form>
+		</div>
 
 		<div class="row">
 
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-toggle="modal"
-				data-target="#exampleModal">Launch demo modal</button>
-
-			<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">...</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Save
-								changes</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
+<div>contacts</div>
 		</div>
 	</div>
-	contacts
+	
 </body>
 </html>
