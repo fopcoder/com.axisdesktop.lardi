@@ -1,9 +1,12 @@
 package com.axisdesktop.lardi.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,14 +16,19 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.axisdesktop.lardi.entity.Contact;
+import com.axisdesktop.lardi.helper.PageResultSet;
+import com.axisdesktop.lardi.helper.PagingItem;
 import com.axisdesktop.lardi.service.ContactService;
 
 @Controller
 @RequestMapping("/contacts")
 public class ContactController {
+  @Autowired
+  private Environment env;
   @Autowired
   private ContactService contactServ;
 
@@ -33,12 +41,36 @@ public class ContactController {
     binder.setValidator(contactValidator);
   }
 
-  @RequestMapping("")
-  public String contacts(@ModelAttribute Contact contact, Model model) {
-    List<Contact> contacts = contactServ.list(contact, 0, 10);
-    model.addAttribute("contacts", contacts);
+  @RequestMapping(value = {"", "/p{page}"})
+  public String contactsPage(Contact contact, Model model,
+      @PathVariable("page") Optional<Integer> page) {
 
-    System.err.println(contact);
+    int pageNum = page.orElse(0);
+    int limit = Integer.valueOf(env.getProperty("lardi.contact.limit", "10"));
+
+    PageResultSet<Contact> res = contactServ.list(contact, pageNum, limit);
+    model.addAttribute("contacts", res.getRows());
+
+    if (res.getTotalPages() > 1) {
+      List<PagingItem> pl = new ArrayList<>();
+      String append = PagingItem.hrefAppend(contact);
+      if (append.length() > 0)
+        append = "?" + append;
+
+      for (int i = 0; i < res.getTotalPages(); i++) {
+        String href = "";
+        if (i != 0) {
+          href = "/p" + i + append;
+        } else {
+          href = append;
+        }
+
+        PagingItem pi = new PagingItem(i, i + 1 + "", href, pageNum == i ? true : false);
+        pl.add(pi);
+      }
+
+      model.addAttribute("paging", pl);
+    }
 
     return "contacts";
   }
@@ -64,45 +96,14 @@ public class ContactController {
       return "contacts-add";
     }
 
-    return "contacts";
+    return "redirect:/contacts";
   }
 
-  // @PostMapping("/registration")
-  // public String registration2(@ModelAttribute @Validated User user, BindingResult bindingResult)
-  // {
-  // if (bindingResult.hasErrors()) {
-  // return "registration";
-  // }
-  //
-  // user.setPassword(passwordEnc.encode(user.getPassword()));
-  // userServ.create(user);
-  //
-  // return "contacts";
-  // }
+  @GetMapping("/delete/{id}")
+  public String delete(@PathVariable("id") int id, Principal principal) {
+    contactServ.deleteByIdAndUserName(id, principal.getName());
 
-  // @GetMapping("/list")
-  // public String list() {
-  //
-  // return null;
-  // }
-  //
-  // @GetMapping("/{id}")
-  // public String load(@PathVariable("id") String id) {
-  // return id;
-  // }
-  //
-  // @PostMapping("/create")
-  // public void create() {
-  //
-  // }
-  //
-  // @PostMapping("/update")
-  // public void update() {
-  //
-  // }
-  //
-  // @GetMapping("/delete/{id}")
-  // public void delete() {
-  //
-  // }
+    return "redirect:/contacts";
+  }
+
 }

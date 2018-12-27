@@ -3,7 +3,7 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: jdbc:mysql://78.46.187.170:3306/lardi
+    url: jdbc:mysql://78.46.187.170:3306/lardi?useUnicode=yes&characterEncoding=UTF-8
     username: lardi
     password: lardi
 
@@ -13,4 +13,4 @@ spring:
       
 lardi:
   contact:
-    per-page: 3
+    limit: 3

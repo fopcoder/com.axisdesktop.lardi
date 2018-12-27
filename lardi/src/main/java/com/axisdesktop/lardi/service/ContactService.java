@@ -1,10 +1,13 @@
 package com.axisdesktop.lardi.service;
 
-import java.util.List;
 import com.axisdesktop.lardi.entity.Contact;
+import com.axisdesktop.lardi.helper.PageResultSet;
 
 public interface ContactService {
   public Contact create(Contact contact, String login);
 
-  public List<Contact> list(Contact contact, int offset, int limit);
+  public PageResultSet<Contact> list(Contact contact, int offset, int limit);
+
+  public boolean deleteByIdAndUserName(int id, String name);
+
 }

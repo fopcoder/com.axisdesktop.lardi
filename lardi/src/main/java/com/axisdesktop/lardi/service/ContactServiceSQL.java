@@ -1,14 +1,15 @@
 package com.axisdesktop.lardi.service;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.axisdesktop.lardi.entity.Contact;
-import com.axisdesktop.lardi.entity.ContactSpecification;
 import com.axisdesktop.lardi.entity.User;
+import com.axisdesktop.lardi.helper.ContactSpecification;
+import com.axisdesktop.lardi.helper.PageResultSet;
 import com.axisdesktop.lardi.repository.ContactRepository;
 import com.axisdesktop.lardi.repository.UserRepository;
 
@@ -39,14 +40,26 @@ public class ContactServiceSQL implements ContactService {
   }
 
   @Override
-  public List<Contact> list(Contact contact, int offset, int limit) {
+  public PageResultSet<Contact> list(Contact contact, int offset, int limit) {
     ContactSpecification spec = new ContactSpecification(contact);
+    Page<Contact> page =
+        contactRepo.findAll(spec, PageRequest.of(offset, limit, Sort.Direction.DESC, "id"));
+    PageResultSet<Contact> res = new PageResultSet<>(page, offset, limit);
 
-    // List<Contact> contacts = contactRepo.findByName(null);
-    Page<Contact> page = contactRepo.findAll(spec, PageRequest.of(offset, limit));
+    return res;
+  }
 
-    System.err.println(page.getContent());
+  @Override
+  @Transactional
+  public boolean deleteByIdAndUserName(int id, String name) {
+    User user = userRepo.getByLogin(name);
+    Contact contact = contactRepo.getByIdAndUserId(id, user.getId());
 
-    return page.getContent();
+    if (contact != null) {
+      contactRepo.deleteById(contact.getId());
+      return true;
+    }
+
+    return false;
   }
 }

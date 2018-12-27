@@ -20,16 +20,50 @@
 						<input type="text" class="form-control" name="phone" id="phone" th:field="*{phone}" placeholder="Телефон">
 					</div>
 					<div class="col-auto">
-		     				<button type="submit" class="btn btn-primary">Искать</button>
+		     			<button type="submit" class="btn btn-primary">Искать</button>
+		     			<button type="button" class="btn btn-primary" onclick="document.location.href='/contacts'">Очистить</button>
 		   			</div>
 				</div>
 			</form>
 		</div>
 
-		<div class="row">
-
-<div>contacts</div>
+		<div class="row" style="margin:10px">
+			<table class="table table-sm">
+			  <thead>
+			    <tr>
+			      <th>ID</th>
+			      <th>Фамилия</th>
+			      <th>Имя</th>
+			      <th>Отчество</th>
+			      <th>Мобильный</th>
+			      <th>Домашний</th>
+			      <th>Email</th>
+			      <th>Адрес</th>
+			      <th></th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="c : ${contacts}">
+			      <td th:text="${c.id}">1</td>
+			      <td th:text="${c.surname}">Mark</td>
+			      <td th:text="${c.name}">Mark</td>
+			      <td th:text="${c.patronymic}">Mark</td>
+			      <td th:text="${c.cellular}">Mark</td>
+			      <td th:text="${c.phone}">Mark</td>
+			      <td th:text="${c.email}">Mark</td>
+			      <td th:text="${c.address}">Mark</td>
+			      <td><a th:href="@{'/contacts/delete/'+${c.id}}" onclick="return confirm('удалить?')">удалить</a></td>
+			    </tr>
+			  </tbody>
+			</table>
 		</div>
+		<nav>
+		  <ul class="pagination" th:if="${paging != null}">
+		    <th:block th:each="p : ${paging}">
+		    <li th:attr="class=${p.isActive()?'page-item active':'page-item'}"><a class="page-link" th:href="@{'/contacts'+ ${p.href}}" th:text="${p.text}">1</a></li>
+		    </th:block>
+		  </ul>
+		</nav>
 	</div>
 	
 </body>
