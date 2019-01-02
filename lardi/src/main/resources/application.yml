@@ -1,4 +1,8 @@
 spring:
+  profiles:
+    active:
+      - sql
+#      - json
   jpa:
     hibernate:
       ddl-auto: validate
@@ -14,3 +18,5 @@ spring:
 lardi:
   contact:
     limit: 3
+  storage:
+    path: C:\Temp\lardi-json

@@ -1,6 +1,7 @@
 package com.axisdesktop.lardi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,6 +15,7 @@ import com.axisdesktop.lardi.repository.ContactRepository;
 import com.axisdesktop.lardi.repository.UserRepository;
 
 @Service
+@Profile("sql")
 public class ContactServiceSQL implements ContactService {
   @Autowired
   private UserRepository userRepo;
@@ -51,8 +53,8 @@ public class ContactServiceSQL implements ContactService {
 
   @Override
   @Transactional
-  public boolean deleteByIdAndUserName(int id, String name) {
-    User user = userRepo.getByLogin(name);
+  public boolean deleteByIdAndUserName(int id, String login) {
+    User user = userRepo.getByLogin(login);
     Contact contact = contactRepo.getByIdAndUserId(id, user.getId());
 
     if (contact != null) {
@@ -62,4 +64,28 @@ public class ContactServiceSQL implements ContactService {
 
     return false;
   }
+
+  @Override
+  public Contact get(int id, String login) {
+    User user = userRepo.getByLogin(login);
+    Contact contact = contactRepo.getByIdAndUserId(id, user.getId());
+
+    return contact;
+  }
+
+  @Override
+  @Transactional
+  public Contact update(Contact contact, String login) {
+    User user = userRepo.getByLogin(login);
+    Contact test = contactRepo.getByIdAndUserId(contact.getId(), user.getId());
+
+    if (test == null)
+      return null;
+
+    contact.setUser(user);
+    contactRepo.save(contact);
+
+    return contact;
+  }
+
 }

@@ -8,6 +8,10 @@ public interface ContactService {
 
   public PageResultSet<Contact> list(Contact contact, int offset, int limit);
 
-  public boolean deleteByIdAndUserName(int id, String name);
+  public Contact get(int id, String login);
+
+  public Contact update(Contact contact, String login);
+
+  public boolean deleteByIdAndUserName(int id, String login);
 
 }

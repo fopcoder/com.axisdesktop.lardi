@@ -72,19 +72,19 @@ public class ContactController {
       model.addAttribute("paging", pl);
     }
 
-    return "contacts";
+    return "contacts/index";
   }
 
   @GetMapping("/add")
   public String add(Contact contact, Model model) {
-    return "contacts-add";
+    return "contacts/add";
   }
 
   @PostMapping("/add")
   public String create(@ModelAttribute @Validated Contact contact, BindingResult bindingResult,
       Principal principal, Model model) {
     if (bindingResult.hasErrors()) {
-      return "contacts-add";
+      return "contacts/add";
     }
 
     try {
@@ -93,7 +93,38 @@ public class ContactController {
       e.printStackTrace();
       model.addAttribute("globalError", "Системная ошибка");
 
-      return "contacts-add";
+      return "contacts/add";
+    }
+
+    return "redirect:/contacts";
+  }
+
+  @GetMapping("/update/{id}")
+  public String update(@PathVariable("id") int id, Principal principal, Model model) {
+    Contact contact = contactServ.get(id, principal.getName());
+
+    if (contact == null)
+      return "redirect:/error";
+
+    model.addAttribute("contact", contact);
+
+    return "contacts/update";
+  }
+
+  @PostMapping("/update")
+  public String update_form(@ModelAttribute @Validated Contact contact, BindingResult bindingResult,
+      Principal principal, Model model) {
+    if (bindingResult.hasErrors()) {
+      return "contacts/update";
+    }
+
+    try {
+      contactServ.update(contact, principal.getName());
+    } catch (Exception e) {
+      e.printStackTrace();
+      model.addAttribute("globalError", "Системная ошибка");
+
+      return "contacts/update";
     }
 
     return "redirect:/contacts";
